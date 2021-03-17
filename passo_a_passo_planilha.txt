@@ -1,0 +1,12 @@
+TRABALHISTAS
+1 - remover colunas em branco
+2 - remover o campo SÓCIO(numrero)
+3 - trocar cabeçalho para : APELIDO;QTD_EMPREGADOS_INICIO;QTD_EMPREGADOS_FIM;APELIDO_BASE;NOME_SOCIO;CPF;PARTICIPACAO;RENDIMENTO;PRO_LABORE;IRRF
+4 - salvar planilha em csv
+
+BALANCETE BASE
+1 - remover colunas em branco
+2 - salvar planilha em csv 
+
+EXTRAS 
+1 - adicionar cnpj da empresa no arquivo do TRABALHISTAS
