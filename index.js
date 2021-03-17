@@ -22,13 +22,6 @@ const buttonsJson = {
     }
 };
 
-for (let index = 0; index < Object.keys(configJson).length; index++) {
-    console.log(Object.keys(configJson)[index])
-
-}
-
-process.exit();
-
 
 
 async function run() {
