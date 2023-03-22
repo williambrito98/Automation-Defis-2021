@@ -3,21 +3,31 @@ import json
 import pandas as pd
 
 df = pd.read_csv('./TRABALHISTAS.csv', encoding='ANSI', sep=';', dtype='string')
-df2 = pd.read_csv('./BALANCETE_BASE.csv', encoding='ANSI', sep=';', header=None,
+df2 = pd.read_csv('./BALANCETE_BASE.csv', encoding='UTF-8', sep=';', header=None, index_col=False,
                   names=["APELIDO", "CONTA_CONTABIL", "DESCRICAO_CONTA", "SALDO_ANTERIOR", "DEBITO", "CREDITO",
-                         "SALDO_ATUAL", "TIPO", "CONTA", "DESCRICAO", "REDUZIDA", 'UN'])
+                         "SALDO_ATUAL", "TIPO", "CONTA", "DESCRICAO", "REDUZIDA"])
 df3 = pd.read_csv('./CLIENTES.csv', encoding='ANSI', sep=';', dtype='string')
+#df4 = pd.read_csv('defis_faltantes_2021.csv', encoding='UTF-8', dtype='string', sep=';')
 df = df.fillna('')
 df2 = df2.fillna('')
+#df4 = df4.fillna('')
 df2 = df2.sort_values(['APELIDO', 'DESCRICAO_CONTA'])
 df3 = df3.sort_values(['APELIDO'])
-configJson = {x: {'cpf_cnpj': '', 'qtd_empregados_inicio': 0, 'qtd_empregados_fim': 0, 'lucro_contabil': 0,
-                  'socios': [], 'saldo_caixa_inicio': 0, 'saldo_caixa_fim': 0, 'total_despesas': 0}
-              for x in df3['APELIDO'].values if x != ''}
+
+configJson = {
+    x: {'cpf_cnpj': '', 'cpf_responsavel': '', 'codigo_acesso': '', 'qtd_empregados_inicio': 0, 'qtd_empregados_fim': 0,
+        'lucro_contabil': 0,
+        'socios': [], 'saldo_caixa_inicio': 0, 'saldo_caixa_fim': 0, 'total_despesas': 0}
+    for x in df3['APELIDO'].values if x != ''}
 
 for index, row in df3.iterrows():
     if configJson.get(row.APELIDO, None):
         configJson.get(row.APELIDO).update({'cpf_cnpj': row.CNPJ.zfill(14)})
+
+# for index, row in df4.iterrows():
+#     if configJson.get(row.APELIDO, None):
+#         configJson.get(row.APELIDO).update({'cpf_responsavel': row.CPF})
+#         configJson.get(row.APELIDO).update({'codigo_acesso': row.CODIGO_ACESSO})
 
 for index, row in df.iterrows():
     if configJson.get(row.APELIDO, None):
@@ -72,5 +82,5 @@ for index, row in df2.iterrows():
                     row.SALDO_ATUAL.replace('.', '').replace(',', '').replace('-', '0'))})
 
 configJson = json.dumps(configJson)
-with open('./config_2.json', mode='w') as f:
+with open('./config.json', mode='w') as f:
     f.write(configJson)
